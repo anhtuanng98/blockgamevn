@@ -1,3 +1,16 @@
+# Block Game VN
+# Blocking game LOL, PUBG...
+#
+# Project home page:
+# https://github.com/anhtuanng98/blockgamevn
+#
+# Fetch the latest version of this file:
+# https://raw.githubusercontent.com/anhtuanng98/blockgamevn/master/blockgamevn.txt
+#
+# License:
+# CC Attribution 3.0 (http://creativecommons.org/licenses/by/3.0/)
+
+# Liên quân Mobile
 10178main.broadlink.com.cn^$important
 10178tcp.broadlink.com.cn^$important
 10178backup.broadlink.com.cn^$important
@@ -66,6 +79,8 @@ cdn.vn.garenanow.com^$important
 catalog.gamepass.com^$important
 aka.ms^$important
 mobile-gtalk.l.google.com^$important
+
+# PUBG BETA
 www.pubgmobile.com^$important
 ig-us-notice.igamecj.com^$important
 pubgmvn.helpshift.com^$important
