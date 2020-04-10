@@ -11,10 +11,7 @@
 # CC Attribution 3.0 (http://creativecommons.org/licenses/by/3.0/)
 
 # Liên quân Mobile
-||10178main.broadlink.com.cn^$important
-||10178tcp.broadlink.com.cn^$important
-||10178backup.broadlink.com.cn^$important
-||30014backup.broadlink.com.cn^$important
+||receiver.sg.tdm.qq.com^$important
 ||i.pinimg.com^$important
 ||f.gxx.garenanow.com^$important
 ||oth.eve.mdt.qq.com^$important
@@ -110,3 +107,4 @@
 ||intldlgs.qq.com^$important
 ||filecdn.igamecj.com^$important
 ||socialpoint.helpshift.com^$important
+||www.pubgmobile.com^$important
