@@ -1,4 +1,4 @@
-# blockgamevn
+# Block Liên Quân
 Block Liên Quân Mobile
 Thêm filter vào bộ lọc của AdGuard Home để chặn đăng nhập Liên Quân Mobile
 
