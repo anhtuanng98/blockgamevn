@@ -1,3 +1,17 @@
+# Block PUBG (Beta)
+# Blocking game PUBG
+#
+# Project home page:
+# https://github.com/anhtuanng98/blockgamevn
+#
+# Fetch the latest version of this file:
+# https://raw.githubusercontent.com/anhtuanng98/blockgamevn/master/pubgbeta.txt
+#
+# License:
+# CC Attribution 3.0 (http://creativecommons.org/licenses/by/3.0/)
+
+
+
 # PUBG BETA
 ||www.pubgmobile.com^$important
 ||ig-us-notice.igamecj.com^$important
