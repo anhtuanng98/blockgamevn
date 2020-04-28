@@ -1,5 +1,5 @@
-# Block Game VN
-# Blocking game LOL, PUBG...
+# Block Liên Quân Mobile
+# Blocking game liên Quân Mobile
 #
 # Project home page:
 # https://github.com/anhtuanng98/blockgamevn
@@ -77,34 +77,3 @@
 ||aka.ms^$important
 ||mobile-gtalk.l.google.com^$important
 
-# PUBG BETA
-||www.pubgmobile.com^$important
-||ig-us-notice.igamecj.com^$important
-||pubgmvn.helpshift.com^$important
-||p22-buy.itunes-apple.com.akadns.net^$important
-||file.igamecj.com^$important
-||vnglobby.igamecj.com^$important
-||receiver.sg.tdm.qq.com^$important
-||ig-us-sdkapi.igamecj.com^$important
-||cloudctrl.gcloud.qq.com^$important
-||app.adjust.com^$important
-||cdn.wetest.qq.com^$important
-||sg.tdm.qq.com^$important
-||p7-buy.itunes-apple.com.akadns.net^$important
-||krping.igamecj.com^$important
-||euping.igamecj.com^$important
-||saping.igamecj.com^$important
-||meping.igamecj.com^$important
-||hkping.igamecj.com^$important
-||naping.igamecj.com^$important
-||qos.hk.gcloudcs.com^$important
-||hk.voice.gcloudcs.com^$important
-||pay.igamecj.com^$important
-||nawzryhwatm.broker.tplay.qq.com^$important
-||napubgm.broker.tplay.qq.com^$important
-||pandora.game.qq.com^$important
-||vngpublic.igamecj.com^$important
-||intldlgs.qq.com^$important
-||filecdn.igamecj.com^$important
-||socialpoint.helpshift.com^$important
-||www.pubgmobile.com^$important
