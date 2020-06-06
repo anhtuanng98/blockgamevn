@@ -1,3 +1,73 @@
+- id: EN - Doorbell
+  alias: EN - Doorbell
+  trigger:
+  - from: ''
+    to: single
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  - from: ''
+    to: double
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  - from: ''
+    to: single
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  - from: ''
+    to: long_release
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.living_room_speaker_2
+      volume_level: '0.6'
+    service: media_player.volume_set
+  - service: media_player.play_media
+    data:
+      entity_id: media_player.living_room_speaker_2
+      media_content_id: https://anhtuanng98.duckdns.org/local/music/Doorbell1.mp3
+      media_content_type: audio/mp3
+- id: EN - Doorbell sensor
+  alias: EN - Doorbell sensor
+  trigger:
+  - from: ''
+    to: single
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  - from: ''
+    to: double
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  - from: ''
+    to: long_release
+    entity_id: sensor.0x00158d00036381d4_click
+    platform: state
+  condition: []
+  action:
+  - service: virtual.turn_on
+    entity_id: binary_sensor.virtual_en_doorbell
+  - delay: 00:00:02
+  - service: virtual.turn_off
+    entity_id: binary_sensor.virtual_en_doorbell
+- id: Environment - Warning 1 - Medium
+  alias: Environment - Warning 1 - Medium
+  trigger:
+  - from: 'on'
+    to: 'off'
+    entity_id: switch.0x00158d00023ff505_switch
+    platform: state
+  - from: 'on'
+    to: 'off'
+    entity_id: switch.br2_fan
+    platform: state
+  condition: []
+  action:
+  - delay: 00:00:02
+  - service: switch.turn_on
+    entity_id: switch.br2_fan
+  - service: switch.turn_on
+    entity_id: switch.0x00158d00023ff505_switch
 - id: Environment - Warning 1 - Medium
   alias: Environment - Warning 1 - Medium
   trigger:
@@ -88,14 +158,6 @@
 - id: General - IR Remote
   alias: General - IR Remote
   trigger:
-  - entity_id: switch.tv_fan1
-    from: 'off'
-    platform: state
-    to: 'on'
-  - entity_id: switch.tv_fan2
-    from: 'off'
-    platform: state
-    to: 'on'
   - entity_id: switch.tv_hometheatre2
     from: 'off'
     platform: state
@@ -128,15 +190,15 @@
   action:
   - entity_id: group.remote
     service: switch.turn_off
-- id: HASS - turn off automation WC
-  alias: HASS - turn off automation WC
+- id: HASS - turn on automation
+  alias: HASS - turn on automation
   description: ''
   trigger:
   - event: start
     platform: homeassistant
   condition: []
   action:
-  - delay: 00:05:00
+  - delay: 00:02:00
   - entity_id: automation.wc1_ceiling_light_1_on
     service: automation.turn_on
   - entity_id: automation.wc1_ceiling_on_heating_off
@@ -183,6 +245,45 @@
   - data: {}
     entity_id: automation.wc2_open_door_when_lights_off
     service: automation.turn_on
+  - entity_id: automation.br3_am43_left_0_when_lux_over_5000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_50_when_lux_over_4000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_75_when_lux_over_3000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_0_when_lux_over_2700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_50_when_lux_over_1700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_75_when_lux_over_700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_left_100_when_lux_under_100
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_0_when_lux_over_5000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_50_when_lux_over_4000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_75_when_lux_over_3000_morning
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_0_when_lux_over_2700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_50_when_lux_over_1700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_75_when_lux_over_700_afternoon
+    service: automation.turn_on
+  - entity_id: automation.br3_am43_right_100_when_lux_under_100
+- id: Zigbee - Get status
+  alias: Zigbee - Get status
+  initial_state: 'true'
+  trigger:
+  - platform: time_pattern
+    seconds: /5
+  condition:
+  - after: 05:00:00
+    before: '23:00:00'
+    condition: time
+  action:
+  - service: script.zigbee_get_status
 - id: update_networkmap
   alias: Zigbee - Update map
   trigger:
@@ -191,7 +292,6 @@
     seconds: '0'
   action:
   - service: zigbee2mqtt_networkmap.update
-  hide_entity: true
 - id: General - Rain sensor - 5h00-22h00
   alias: General - Rain sensor - 5h00-22h00
   trigger:
@@ -349,7 +449,7 @@
     entity_id: switch.lv_sublight2
     state: 'off'
   - condition: state
-    entity_id: switch.kc_light_1
+    entity_id: switch.kc_light1
     state: 'off'
   - condition: state
     entity_id: switch.kc_light2
@@ -363,10 +463,13 @@
   - condition: state
     entity_id: binary_sensor.0x00158d0002e75e45_contact
     state: 'on'
+  - below: '10'
+    condition: numeric_state
+    entity_id: sensor.kc_illuminance_illuminance_lux
   action:
+  - service: script.warning
   - entity_id: switch.lv_mainlight11
     service: switch.turn_on
-  - service: script.warning
 - id: Entrance - Welcome (door open)
   alias: Entrance - Welcome (door open)
   description: ''
@@ -407,8 +510,6 @@
   - above: '80'
     entity_id: sensor.kc_illuminance_illuminance_lux
     platform: numeric_state
-  - condition: template
-    value_template: "{{ state_attr('cover.0x00158d00040c0e02_cover', 'current_position') | float < 1 }}"
   condition: []
   action:
   - entity_id: switch.entrance_light
@@ -461,6 +562,18 @@
   - delay: 00:01:00
   - entity_id: automation.entrance_welcome_door_open
     service: automation.turn_on
+- id: KC - Outlet OFF
+  alias: KC - Outlet OFF
+  description: Tắt outlet khi tiêu thụ dưới 1W trong 5p
+  trigger:
+  - below: '1'
+    entity_id: sensor.0x00158d0001a6899b_power
+    for: 00:05:00
+    platform: numeric_state
+  condition: []
+  action:
+  - entity_id: switch.0x00158d0001a6899b_switch
+    service: switch.turn_off
 - id: KC - Table - Sunset to 22h30
   alias: KC - Table - Sunset to 22h30
   description: Bật 2 đèn bếp sau khi mặt trời lặn cho tới 22h30
@@ -483,9 +596,31 @@
     service: switch.turn_on
   - entity_id: switch.kc_light2
     service: switch.turn_on
-- id: KC - Reflector 22h30-05h00
-  alias: KC - Reflector 22h30-05h00
-  description: Bật đèn hắt sau 22h30 và trước 5h00 sáng
+- id: KC - Light 2 OFF when lux over 50
+  alias: KC - Light 2 OFF when lux over 50
+  description: Tắt đèn bếp 2 khi ánh sáng quá 50
+  trigger:
+  - entity_id: sensor.kc_illuminance_illuminance_lux
+    above: '50'
+    platform: numeric_state
+  condition: []
+  action:
+  - service: switch.turn_off
+    entity_id: switch.kc_light2
+- id: KC - Light 1 OFF when lux over 57
+  alias: KC - Light 1 OFF when lux over 57
+  description: Tắt đèn bếp 1 khi ánh sáng quá 57
+  trigger:
+  - entity_id: sensor.kc_illuminance_illuminance_lux
+    above: '57'
+    platform: numeric_state
+  condition: []
+  action:
+  - service: switch.turn_off
+    entity_id: switch.kc_light1
+- id: KC - Light 3 22h30-05h00
+  alias: KC - Light 3 22h30-05h00
+  description: Bật đèn bếp 3 sau 22h30 và trước 5h00 sáng
   trigger:
   - entity_id: binary_sensor.0x00158d0002d3c211_occupancy
     from: 'off'
@@ -523,11 +658,11 @@
     - before: 05:00:00
       condition: time
   action:
-  - entity_id: light.sonoff_100096209c
-    service: light.turn_on
+  - entity_id: switch.kc_light3
+    service: switch.turn_on
   - delay: 00:01:00
-  - entity_id: light.sonoff_100096209c
-    service: light.turn_off
+  - entity_id: switch.kc_light3
+    service: switch.turn_off
 - id: KC - Reflector light ON
   alias: KC - Reflector light ON
   description: ''
@@ -536,25 +671,30 @@
     from: 'off'
     platform: state
     to: 'on'
+  - below: '50'
+    entity_id: sensor.0x00158d00040c0e02_cover
+    platform: numeric_state
   condition:
   - condition: or
     conditions:
     - below: '110'
       condition: numeric_state
       entity_id: sensor.kc_illuminance_illuminance_lux
-    - condition: template
-      value_template: "{{ state_attr('cover.0x00158d00040c0e02_cover', 'current_position') | float < 40 }}"
+    - below: '50'
+      condition: numeric_state
+      entity_id: sensor.0x00158d00040c0e02_cover
+  - condition: state
+    entity_id: binary_sensor.0x00158d00020b5a9d_occupancy
+    state: 'on'
   action:
   - entity_id: light.sonoff_100096209c
     service: light.turn_on
-  - service: automation.turn_on
-    entity_id: automation.kc_reflector_light_off
 - id: KC - Reflector light OFF
   alias: KC - Reflector light OFF
   description: Tắt đèn gầm tủ bếp sau 2 phút
   trigger:
   - entity_id: binary_sensor.0x00158d00020b5a9d_occupancy
-    for: 00:00:30
+    for: 00:01:00
     from: 'on'
     platform: state
     to: 'off'
@@ -562,11 +702,9 @@
   action:
   - entity_id: light.sonoff_100096209c
     service: light.turn_off
-  - entity_id: automation.kc_reflector_light_off
-    service: automation.turn_off
-- id: KC - Reflector - OFF (ON by WC1 Door)
-  alias: KC - Reflector - OFF (ON by WC1 Door)
-  description: Tắt đèn hắt do mở cửa WC1 bật lên từ 22h30 đến 5h sáng
+- id: KC - Light 3 - OFF (ON by WC1 Door)
+  alias: KC - Light 3 - OFF (ON by WC1 Door)
+  description: Tắt đèn bếp 3 do mở cửa WC1 bật lên từ 22h30 đến 5h sáng
   trigger:
   - entity_id: binary_sensor.0x00158d0002d3c211_occupancy
     from: 'off'
@@ -580,15 +718,15 @@
     - before: 05:00:00
       condition: time
   - condition: state
-    entity_id: light.sonoff_100096209c
+    entity_id: switch.kc_light3
     state: 'on'
   action:
-  - entity_id: light.sonoff_100096209c
-    service: light.turn_off
+  - entity_id: switch.kc_light3
+    service: switch.turn_off
   - delay: 00:00:05
-  - entity_id: automation.kc_reflector_22h30_05h00
+  - entity_id: automation.kc_light_3_22h30_05h00
     service: automation.turn_on
-  - entity_id: automation.kc_reflector_off_on_by_wc1_door
+  - entity_id: automation.kc_light_3_off_on_by_wc1_door
     service: automation.turn_off
 - id: KC - Curtain ON
   alias: KC - Curtain ON
@@ -610,10 +748,36 @@
     from: 'on'
     platform: state
     to: 'off'
+  - above: '99.9'
+    entity_id: sensor.0x00158d00040c0e02_cover
+    platform: numeric_state
+  - below: '0.1'
+    entity_id: sensor.0x00158d00040c0e02_cover
+    platform: numeric_state
   condition: []
   action:
   - entity_id: cover.0x00158d00040c0e02_cover
     service: cover.stop_cover
+  - data: {}
+    entity_id: switch.kc_curtain
+    service: switch.turn_off
+- id: LV - Light OFF when lux over 80
+  alias: LV - Light OFF when lux over 80
+  description: Tắt đèn phòng khách khi ánh sáng quá 80
+  trigger:
+  - entity_id: sensor.kc_illuminance_illuminance_lux
+    above: '80'
+    platform: numeric_state
+  condition: []
+  action:
+  - service: switch.turn_off
+    entity_id: switch.lv_mainlight11
+  - service: switch.turn_off
+    entity_id: switch.lv_mainlight12
+  - service: switch.turn_off
+    entity_id: switch.lv_sublight2
+  - service: switch.turn_off
+    entity_id: switch.lv_sublight2
 - id: LV - Light - Before 22h30
   alias: LV - Light - Before 22h30
   trigger:
@@ -622,11 +786,12 @@
     platform: state
     to: 'on'
   condition:
-  - before: '22:30:00'
+  - after: 05:15:00
+    before: '22:30:00'
     condition: time
-  - after: sunset
-    after_offset: -00:30:00
-    condition: sun
+  - below: '45'
+    condition: numeric_state
+    entity_id: sensor.kc_illuminance_illuminance_lux
   - condition: state
     entity_id: switch.lv_mainlight11
     state: 'off'
@@ -756,6 +921,55 @@
   action:
   - entity_id: switch.lv_mainlight12
     service: switch.turn_off
+- id: LV - Fan Oscilating switch ON
+  alias: LV - Fan Oscilating switch ON
+  description: ''
+  trigger:
+  - from: 'off'
+    to: 'on'
+    entity_id: switch.sonoff_1000c2d93c
+    platform: state
+  condition:
+  - condition: state
+    entity_id: input_select.lv_fan_oscillating
+    state: 'off'
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: input_select.lv_fan_oscillating
+      option: true
+- id: LV - Fan Oscilating switch OFF
+  alias: LV - Fan Oscilating switch OFF
+  description: ''
+  trigger:
+  - from: 'on'
+    to: 'off'
+    entity_id: switch.sonoff_1000c2d93c
+    platform: state
+  condition:
+  - condition: state
+    entity_id: input_select.lv_fan_oscillating
+    state: 'on'
+  action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: input_select.lv_fan_oscillating
+      option: false
+- id: LV - Fan Oscilating switch ON when LV - Fan OFF
+  alias: LV - Fan Oscilating switch ON when LV - Fan OFF
+  description: ''
+  trigger:
+  - from: 'off'
+    to: 'on'
+    entity_id: switch.sonoff_1000c2d93c
+    platform: state
+  condition:
+  - condition: state
+    entity_id: fan.lv_fan
+    state: 'off'
+  action:
+  - service: fan.turn_on
+    entity_id: fan.lv_fan
 - id: LV - Fan speed 1
   alias: LV - Fan speed 1
   description: ''
@@ -768,7 +982,7 @@
   action:
   - service: input_select.select_option
     data_template:
-      entity_id: input_select.fan_lv_speed
+      entity_id: input_select.lv_fan_speed
       option: 1
 - id: LV - Fan speed 2
   alias: LV - Fan speed 2
@@ -782,7 +996,7 @@
   action:
   - service: input_select.select_option
     data_template:
-      entity_id: input_select.fan_lv_speed
+      entity_id: input_select.lv_fan_speed
       option: 2
 - id: LV - Fan speed 3
   alias: LV - Fan speed 3
@@ -795,7 +1009,7 @@
   action:
   - service: input_select.select_option
     data_template:
-      entity_id: input_select.fan_lv_speed
+      entity_id: input_select.lv_fan_speed
       option: 3
 - id: LV - Fan on
   alias: LV - Fan on
@@ -806,12 +1020,12 @@
     platform: numeric_state
   condition:
   - condition: state
-    entity_id: fan.fan_lv
+    entity_id: fan.lv_fan
     state: 'off'
   action:
-  - entity_id: fan.fan_lv
+  - entity_id: fan.lv_fan
     service: fan.turn_on
-  - entity_id: input_boolean.fan_lv_power_state
+  - entity_id: input_boolean.lv_fan_power_state
     service: input_boolean.turn_on
 - id: LV - Fan off
   alias: LV - Fan off
@@ -822,12 +1036,12 @@
     platform: numeric_state
   condition:
   - condition: state
-    entity_id: fan.fan_lv
+    entity_id: fan.lv_fan
     state: 'on'
   action:
-  - entity_id: fan.fan_lv
+  - entity_id: fan.lv_fan
     service: fan.turn_off
-  - entity_id: input_boolean.fan_lv_power_state
+  - entity_id: input_boolean.lv_fan_power_state
     service: input_boolean.turn_off
 - id: LV - Main light 2.1 off - 1.1 off
   alias: LV - Main light 2.1 off - 1.1 off
@@ -886,32 +1100,33 @@
   - data: {}
     entity_id: binary_sensor.virtual_br3_desk
     service: virtual.turn_on
-  - data: {}
-    entity_id: automation.br3_light_1_17_30_22_30
-    service: automation.turn_off
-  - data: {}
-    entity_id: automation.br3_bed_lamp
-    service: automation.turn_off
 - id: BR3 - Mi Led Desk Lamp OFF
   alias: BR3 - Mi Led Desk Lamp OFF
   description: ''
   trigger:
   - entity_id: binary_sensor.0x00158d00044b09e1_occupancy
+    for: 00:20:00
     from: 'on'
     platform: state
     to: 'off'
-    for: 00:15:00
   condition: []
   action:
   - data: {}
     entity_id: binary_sensor.virtual_br3_desk
     service: virtual.turn_off
-  - data: {}
-    entity_id: automation.br3_light_1_17_30_22_30
-    service: automation.turn_on
-  - data: {}
-    entity_id: automation.br3_bed_lamp
-    service: automation.turn_on
+- id: BR3 - Light OFF when lux over 55
+  alias: BR3 - Light OFF when lux over 55
+  description: Tắt đèn phòng ngủ 3 khi ánh sáng quá 55
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: '55'
+    platform: numeric_state
+  condition: []
+  action:
+  - service: switch.turn_off
+    entity_id: switch.br3_light1
+  - service: switch.turn_off
+    entity_id: switch.br3_light2
 - id: BR3 - Light 1 - 17:30-22:30
   alias: BR3 - Light 1 - 17:30-22:30
   description: Bật đèn 1 phòng ngủ 3 17h30-22h30
@@ -931,7 +1146,7 @@
     conditions:
     - below: '45'
       condition: numeric_state
-      entity_id: sensor.kc_illuminance_illuminance_lux
+      entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
     - before: '22:30:00'
       condition: time
     - after: 06:00:00
@@ -1156,6 +1371,7 @@
   trigger:
   - below: '2.0'
     entity_id: sensor.br2_fan_energy_power
+    for: 00:00:30
     platform: numeric_state
   condition:
   - condition: state
@@ -1168,6 +1384,9 @@
     service: fan.turn_off
   - entity_id: input_boolean.br2_fan_power_state
     service: input_boolean.turn_off
+  - delay: 00:00:05
+  - entity_id: binary_sensor.virtual_br2_auto_vs_manual
+    service: virtual.turn_on
 - id: BR2 - Delay automation light
   alias: BR2 - Delay automation light
   trigger:
@@ -1194,6 +1413,21 @@
     service: automation.turn_on
   - entity_id: automation.br2_light_3_21h30_22h30
     service: automation.turn_on
+- id: BR2 - Light OFF when lux over 60
+  alias: BR2 - Light OFF when lux over 60
+  description: Tắt đèn phòng ngủ 2 khi ánh sáng quá 60
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: '60'
+    platform: numeric_state
+  condition: []
+  action:
+  - service: switch.turn_off
+    entity_id: switch.br2_light11
+  - service: switch.turn_off
+    entity_id: switch.br2_light12
+  - service: switch.turn_off
+    entity_id: switch.br2_light13
 - id: BR2 - Light 1 - Sunset (-1) - 21h30
   alias: BR2 - Light 1 - Sunset (-1) - 21h30
   trigger:
@@ -1219,7 +1453,7 @@
     state: 'off'
   - below: '45'
     condition: numeric_state
-    entity_id: sensor.kc_illuminance_illuminance_lux
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
   action:
   - entity_id: switch.br2_light11
     service: switch.turn_on
@@ -1510,9 +1744,9 @@
   - condition: state
     entity_id: switch.br1_light13
     state: 'off'
-  - below: '45'
+  - below: '70'
     condition: numeric_state
-    entity_id: sensor.kc_illuminance_illuminance_lux
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
   action:
   - entity_id: switch.br1_light11
     service: switch.turn_on
@@ -1811,6 +2045,37 @@
       entity_id: climate.ac_br1
       hvac_mode: 'off'
     service: climate.set_hvac_mode
+- id: WC1 - Water Pump
+  alias: WC1 - Water Pump
+  trigger:
+  - entity_id: binary_sensor.0x00158d000228147e_occupancy
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.0x00158d00031667e0_occupancy
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.0x00158d00020b5a9d_occupancy
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: 07:00:00
+    before: '23:00:00'
+    condition: time
+  - condition: state
+    state: 'off'
+    entity_id: binary_sensor.0x00158d0002ea2bc8_contact
+  - condition: state
+    state: 'off'
+    entity_id: binary_sensor.0x00158d0002ec2699_contact
+  action:
+  - entity_id: switch.wc1_water_pump
+    service: switch.turn_off
+  - delay: 00:00:05
+  - entity_id: switch.wc1_water_pump
+    service: switch.turn_on
 - id: WC1 - Delay automation light
   alias: WC1 - Delay automation light
   trigger:
@@ -1847,6 +2112,20 @@
   action:
   - entity_id: switch.wc1_light1
     service: switch.turn_on
+- id: WC1 - Light - Force Off
+  alias: WC1 - Light - Force Off
+  trigger:
+  - entity_id: binary_sensor.0x00158d000228147e_occupancy
+    for: 00:30:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - entity_id: switch.wc1_light2
+    service: switch.turn_off
+  - entity_id: switch.wc1_light1
+    service: switch.turn_off
 - id: WC1 - Light - Off
   alias: WC1 - Light - Off
   trigger:
@@ -1858,6 +2137,9 @@
   condition:
   - condition: state
     entity_id: binary_sensor.0x00158d000293171b_contact
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ea2bc8_contact
     state: 'on'
   - condition: or
     conditions:
@@ -1924,6 +2206,19 @@
   action:
   - entity_id: automation.wc1_light_off
     service: automation.turn_off
+  - data: {}
+    entity_id: automation.wc1_open_door
+    service: automation.turn_off
+  - data: {}
+    entity_id: automation.wc1_open_door_22h30_5h00
+    service: automation.turn_off
+  - delay: 00:00:05
+  - data: {}
+    entity_id: automation.wc1_open_door
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.wc1_open_door_22h30_5h00
+    service: automation.turn_on
   initial_state: false
 - id: WC1 - Open Door
   alias: WC1 - Open Door
@@ -1994,7 +2289,6 @@
     service: automation.turn_on
 - id: WC1 - Open Door - 22h30-5h00
   alias: WC1 - Open Door - 22h30-5h00
-  initial_state: false
   description: Bật đèn bếp 3 khi ra khỏi cửa WC1 ban đêm và các đèn đều tắt
   trigger:
   - entity_id: binary_sensor.0x00158d0002ea2bc8_contact
@@ -2034,12 +2328,13 @@
     entity_id: light.sonoff_100096209c
     state: 'off'
   action:
-  - entity_id: light.sonoff_100096209c
-    service: light.turn_on
-  - entity_id: automation.kc_reflector_off_on_by_wc1_door
+  - entity_id: switch.kc_light3
+    service: switch.turn_on
+  - entity_id: automation.kc_light_3_off_on_by_wc1_door
     service: automation.turn_on
-  - entity_id: automation.kc_reflector_22h30_05h00
+  - entity_id: automation.kc_light_3_22h30_05h00
     service: automation.turn_off
+  initial_state: false
 - id: WC1 - Heating on Ceiling off
   alias: WC1 - Heating on Ceiling off
   initial_state: false
@@ -2192,6 +2487,22 @@
   action:
   - entity_id: switch.wc2_light1
     service: switch.turn_on
+- id: WC2 - Light - Force Off
+  alias: WC2 - Light - Force Off
+  trigger:
+  - entity_id: binary_sensor.0x00158d00031667e0_occupancy
+    for: 00:30:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - entity_id: switch.wc2_light1
+    service: switch.turn_off
+  - entity_id: switch.wc2_light2
+    service: switch.turn_off
+  - entity_id: switch.wc2_fan
+    service: switch.turn_off
 - id: WC2 - Light - Off
   alias: WC2 - Light - Off
   trigger:
@@ -2203,6 +2514,9 @@
   condition:
   - condition: state
     entity_id: binary_sensor.0x00158d0002c98705_contact
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2699_contact
     state: 'on'
   - condition: or
     conditions:
@@ -2216,6 +2530,8 @@
   - entity_id: switch.wc2_light1
     service: switch.turn_off
   - entity_id: switch.wc2_light2
+    service: switch.turn_off
+  - entity_id: switch.wc2_fan
     service: switch.turn_off
   initial_state: false
 - id: WC2 - Glass door close - Ceiling
@@ -2271,6 +2587,13 @@
   action:
   - entity_id: automation.wc2_light_off
     service: automation.turn_off
+  - data: {}
+    entity_id: automation.wc2_open_door
+    service: automation.turn_off
+  - delay: 00:00:05
+  - data: {}
+    entity_id: automation.wc2_open_door
+    service: automation.turn_on
   initial_state: false
 - id: WC2 - Open Door
   alias: WC2 - Open Door
@@ -2467,3 +2790,409 @@
   - data: {}
     entity_id: binary_sensor.virtual_door_motion_virtual
     service: virtual.turn_off
+- id: BR3 - AM43 Left 0 when lux over 5000 morning
+  alias: BR3 - AM43 Left 0 when lux over 5000 morning
+  initial_state: false
+  description: ''
+  trigger:
+  - above: '5000'
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    platform: numeric_state
+  - entity_id: binary_sensor.virtual_br3_desk
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - above: '1000'
+    condition: numeric_state
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  action:
+  - data:
+      position: 0
+      entity_id: cover.br3_am43_left
+    service: cover.set_cover_position
+- id: BR3 - AM43 Left 50 when lux over 4000 morning
+  alias: BR3 - AM43 Left 50 when lux over 4000 morning
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 4000
+    platform: numeric_state
+    below: 4999
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_left
+      position: 50
+- id: BR3 - AM43 Left 75 when lux over 3000 morning
+  alias: BR3 - AM43 Left 75 when lux over 3000 morning
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 3000
+    platform: numeric_state
+    below: 3999
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_left
+      position: 75
+- id: BR3 - AM43 Left 0 when lux over 2700 afternoon
+  alias: BR3 - AM43 Left 0 when lux over 2700 afternoon
+  initial_state: false
+  description: ''
+  trigger:
+  - above: '2700'
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    platform: numeric_state
+  - entity_id: binary_sensor.0x00158d00044b09e1_occupancy
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - above: '0'
+    condition: numeric_state
+    entity_id: sensor.br3_am43_left_position
+  - above: '400'
+    condition: numeric_state
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+  - condition: time
+    after: '14:30:00'
+    before: '17:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - data:
+      position: 0
+      entity_id: cover.br3_am43_left
+    service: cover.set_cover_position
+- id: BR3 - AM43 Left 50 when lux over 1700 afternoon
+  alias: BR3 - AM43 Left 50 when lux over 1700 afternoon
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 1700
+    platform: numeric_state
+    below: 2699
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    after: '14:30:00'
+    before: '19:00:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_left
+      position: 50
+- id: BR3 - AM43 Left 75 when lux over 700 afternoon
+  alias: BR3 - AM43 Left 75 when lux over 700 afternoon
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 700
+    platform: numeric_state
+    below: 1699
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    after: '14:30:00'
+    before: '19:00:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_left
+      position: 75
+- id: BR3 - AM43 Left 100 when lux under 100
+  alias: BR3 - AM43 Left 100 when lux under 100
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    below: 100
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_left
+      position: 100
+- id: BR3 - AM43 Right 0 when lux over 5000 morning
+  alias: BR3 - AM43 Right 0 when lux over 5000 morning
+  initial_state: false
+  description: ''
+  trigger:
+  - above: '5000'
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    platform: numeric_state
+  - entity_id: binary_sensor.virtual_br3_desk
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - above: '1000'
+    condition: numeric_state
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - data:
+      position: 0
+      entity_id: cover.br3_am43_right
+    service: cover.set_cover_position
+- id: BR3 - AM43 Right 50 when lux over 4000 morning
+  alias: BR3 - AM43 Right 50 when lux over 4000 morning
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 4000
+    platform: numeric_state
+    below: 4999
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 50
+- id: BR3 - AM43 Right 75 when lux over 3000 morning
+  alias: BR3 - AM43 Right 75 when lux over 3000 morning
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 3000
+    platform: numeric_state
+    below: 3999
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    before: '11:29:59'
+    after: '05:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 75
+- id: BR3 - AM43 Right 0 when lux over 2700 afternoon
+  alias: BR3 - AM43 Right 0 when lux over 2700 afternoon
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 2700
+    platform: numeric_state
+  - entity_id: binary_sensor.virtual_br3_desk
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - above: '400'
+    condition: numeric_state
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+  - condition: time
+    after: '14:30:00'
+    before: '17:30:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 0
+- id: BR3 - AM43 Right 50 when lux over 1700 afternoon
+  alias: BR3 - AM43 Right 50 when lux over 1700 afternoon
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 1700
+    platform: numeric_state
+    below: 2699
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    after: '14:30:00'
+    before: '19:00:00'
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 50
+- id: BR3 - AM43 Right 75 when lux over 700 afternoon
+  alias: BR3 - AM43 Right 75 when lux over 700 afternoon
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    above: 700
+    platform: numeric_state
+    below: 1699
+  condition:
+  - condition: state
+    entity_id: binary_sensor.virtual_br3_desk
+    state: 'off'
+  - condition: time
+    after: '14:30:00'
+    before: '19:00:00'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 75
+- id: BR3 - AM43 Right 100 when lux under 100
+  alias: BR3 - AM43 Right 100 when lux under 100
+  initial_state: false
+  trigger:
+  - entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    below: 100
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: binary_sensor.0x00158d0002ec2698_contact
+    state: 'off'
+  action:
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.br3_am43_right
+      position: 100
+- id: BR3 - AM43 Close when Air Conditioner on
+  alias: BR3 - AM43 Close when Air Conditioner on
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.0x00158d0002ec2698_contact
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: cover.br3_am43_left
+    service: cover.close_cover
+  - data: {}
+    entity_id: cover.br3_am43_right
+    service: cover.close_cover
+- id: BR3 - AM43 open when Air Conditioner off for 15 minutes
+  alias: BR3 - AM43 open when Air Conditioner off for 15 minutes
+  description: ''
+  trigger:
+  - entity_id: sensor.br3_climate_hvac
+    platform: state
+    to: 'off'
+    for: 00:15:00
+  condition: 
+  - condition: numeric_state
+    entity_id: sensor.0x04cf8cdf3c7718af_illuminance_lux
+    below: 5
+  action:
+  - data: {}
+    entity_id: cover.br3_am43_left
+    service: cover.open_cover
+  - data: {}
+    entity_id: cover.br3_am43_right
+    service: cover.open_cover
+- alias: Zigbee2mqtt Log Level
+  id: Zigbee - Log level
+  trigger:
+     - platform: state
+       entity_id: input_select.zigbee2mqtt_log_level
+  action:
+      - service: mqtt.publish
+        data:
+          payload_template: "{{ states('input_select.zigbee2mqtt_log_level') }}"
+          topic: "zigbee2mqtt/bridge/config/log_level"
+- id: Zigbee - Join Enabled
+  alias: Zigbee - Join Enabled
+  trigger:
+    - platform: state
+      entity_id: switch.zigbee2mqtt_main_join
+      to: "on"
+  action:
+    - service: timer.start
+      entity_id: timer.zigbee_permit_join
+  # Automation to stop timer when switch turned off and turn off switch when timer finished
+- id: Zigbee - Join Disabled
+  alias: Zigbee - Join Disabled
+  trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.zigbee_permit_join
+      - platform: state
+        entity_id: switch.zigbee2mqtt_main_join
+        to: "off"
+  action:
+      - service: timer.cancel
+        data:
+          entity_id: timer.zigbee_permit_join
+      - service: switch.turn_off
+        entity_id: switch.zigbee2mqtt_main_join
+- id: Zigbee - Device Joined Notification
+  alias: Zigbee - Device Joined Notification
+  trigger:
+    - platform: mqtt
+      topic: 'zigbee2mqtt/bridge/log'
+  condition:
+     - condition: template
+       value_template: '{{trigger.payload_json.type == "pairing" and trigger.payload_json.message == "interview_successful"}}'
+  action:
+      - service: persistent_notification.create
+        data_template:
+          title: Device joined the zigbee2mqtt network
+          message: "Name: {{trigger.payload_json.meta.friendly_name}},
+                    Vendor: {{trigger.payload_json.meta.vendor}},
+                    Description: {{trigger.payload_json.meta.description}}"
